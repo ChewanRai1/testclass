@@ -1,37 +1,33 @@
+import 'dart:async';
+
+
 import 'package:flutter/material.dart';
 import 'package:taskk/Screen/gridview_screen.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Button Grid',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: SplashScreen(),
-//     );
-//   }
-// }
-
-class SplashScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => GridViewScreen()),
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => GridViewScreen(name: 'Chewan')),
       );
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          "Welcome Chewan",
-          style: TextStyle(fontSize: 24),
-        ),
+        child: Text('Welcome Chewan'),
       ),
     );
   }

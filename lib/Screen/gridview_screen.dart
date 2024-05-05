@@ -1,65 +1,73 @@
 import 'package:flutter/material.dart';
 
-class GridViewScreen extends StatelessWidget {
-  final String name = "chewan"; // Replace with actual name
+class GridViewScreen extends StatefulWidget {
+  final String name;
+  GridViewScreen({required this.name});
+
+  @override
+  _GridViewScreenState createState() => _GridViewScreenState();
+}
+
+class _GridViewScreenState extends State<GridViewScreen> {
+  late List<bool> buttonVisible;
+  late List<bool> colorChanged;
+
+  @override
+  void initState() {
+    super.initState();
+    buttonVisible = List<bool>.filled(widget.name.length, true);
+    colorChanged = List<bool>.filled(widget.name.length, false);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Button Grid')),
       body: GridView.count(
         padding: const EdgeInsets.all(20),
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
         crossAxisCount: 2,
-        children: List.generate(
-          name.length,
-          (index) => MyButton(name, index + 1),
-        ),
+        children: _buildButtons(),
       ),
     );
   }
-}
 
-class MyButton extends StatefulWidget {
-  final String name;
-  final int buttonNumber;
+  List<Widget> _buildButtons() {
+    List<Widget> buttons = [];
+    List<Widget> hiddenButtons = [];  // To store invisible buttons and show them at the end if needed
 
-  MyButton(this.name, this.buttonNumber);
-
-  @override
-  _MyButtonState createState() => _MyButtonState();
-}
-
-class _MyButtonState extends State<MyButton> {
-  Color buttonColor = Colors.blue;
-  bool isVisible = true;
-  bool wasClicked = false; // Track if the button was clicked before
-
-  @override
-  Widget build(BuildContext context) {
-    return Visibility(
-      visible: isVisible,
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            if (!wasClicked) {
-              buttonColor = Colors.green; // Change color on initial click
-              wasClicked = true;
-            } else {
-              isVisible = !isVisible; // Hide button on second click
-            }
-          });
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: buttonColor,
-          foregroundColor: Colors.white,
+    for (int index = 0; index < widget.name.length; index++) {
+      Widget button = Visibility(
+        visible: buttonVisible[index],
+        child: ElevatedButton(
+          child: Text(widget.name[index]),
+          onPressed: () {
+            setState(() {
+              if (colorChanged[index]) {
+                buttonVisible[index] = false;
+              }
+              colorChanged[index] = !colorChanged[index];
+            });
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                if (colorChanged[index]) return Colors.tealAccent;
+                return Colors.lime;
+              },
+            ),
+          ),
         ),
-        child: Text(
-          widget.name[widget.buttonNumber - 1],
-          style: TextStyle(fontSize: 22),
-        ),
-      ),
-    );
+        replacement: Container(),  // Use an empty container as a placeholder
+      );
+
+      if (buttonVisible[index]) {
+        buttons.add(button);
+      } else {
+        hiddenButtons.add(button);  // Collect hidden buttons
+      }
+    }
+
+    return buttons + hiddenButtons;  // Add hidden buttons at the end
   }
 }
