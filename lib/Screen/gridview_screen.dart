@@ -55,7 +55,10 @@ class _MyButtonState extends State<MyButton> {
           backgroundColor: buttonColor,
           foregroundColor: Colors.white,
         ),
-        child: Text(widget.name[widget.buttonNumber - 1]),
+        child: Text(
+          widget.name[widget.buttonNumber - 1],
+          style: TextStyle(fontSize: 22),
+        ),
       ),
     );
   }

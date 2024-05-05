@@ -28,7 +28,10 @@ class SplashScreen extends StatelessWidget {
     });
     return Scaffold(
       body: Center(
-        child: Text("Welcome Chewan"),
+        child: Text(
+          "Welcome Chewan",
+          style: TextStyle(fontSize: 24),
+        ),
       ),
     );
   }
